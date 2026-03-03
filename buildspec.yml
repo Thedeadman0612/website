@@ -1,0 +1,12 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo Installing Docker
+  build:
+    commands:
+      - docker build -t abode-webapp .
+  post_build:
+    commands:
+      - echo Build completed
