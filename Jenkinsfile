@@ -2,29 +2,31 @@ pipeline {
     agent any
 
     stages {
+        
+        stage('Clone repository') {
+            steps {
+                git 'https://github.com/Thedeadman0612/website.git'
+            }
+        }
 
         stage('Build') {
             steps {
-                sh 'docker build -t abode-webapp .'
+                sh 'docker build -t website:v1 .'
             }
         }
 
-        stage('Test') {
+        stage('Push Docker Image') {
             steps {
-                sh 'echo Running tests'
+                sh 'docker tag website:v1 rghadiya/website:v1'
+                sh 'docker push rghadiya/website:v1'
+
             }
+
         }
 
-        stage('Deploy to Prod') {
-            when {
-                branch 'master'
-            }
+        stage('Deploy to kubernetes') {
             steps {
-                sh '''
-                docker stop web || true
-                docker rm web || true
-                docker run -d -p 80:80 --name web abode-webapp
-                '''
+                sh 'kubectl apply -f deployment.yaml'
             }
         }
     }
