@@ -2,12 +2,6 @@ pipeline {
     agent any
 
     stages {
-        
-        stage('Clone repository') {
-            steps {
-                git 'https://github.com/Thedeadman0612/website.git'
-            }
-        }
 
         stage('Build') {
             steps {
@@ -17,11 +11,14 @@ pipeline {
 
         stage('Push Docker Image') {
             steps {
-                sh 'docker tag website:v1 rghadiya/website:v1'
-                sh 'docker push rghadiya/website:v1'
-
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                    sh '''
+                    echo $PASS | docker login -u $USER --password-stdin
+                    docker tag website:v1 rghadiya/website:v1
+                    docker push rghadiya/website:v1
+                    '''
+                }
             }
-
         }
 
         stage('Deploy to kubernetes') {
