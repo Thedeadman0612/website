@@ -13,7 +13,7 @@ spec:
         app: website
     spec:
       containers:
-      -name: website
-       image: "rghadiya/website:v1"
-       ports:
-       - containerPort: 80
+      - name: website
+        image: "rghadiya/website:v1"
+        ports:
+        - containerPort: 80
