@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       -name: website
-       image: rghadiya/website
+      image: rghadiya/website:v1
        ports:
        - containerPort: 80
